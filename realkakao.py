@@ -24,3 +24,4 @@ data={
 
 response = requests.post(url, headers=headers, data=data)
 response.status_code
+print(response.status_code)
