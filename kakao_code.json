@@ -1,10 +1,8 @@
 {
- 
-    "access_token": "_PkfY1rcpWsAf_U17WXW1nG-SCgebKZwdFjOSAorDKYAAAF9MwJzfQ",
-    "token_type": "bearer",
-    "refresh_token": "CeIQXoSs-05zIhhtG-ES1LHbKtPzvhF3rEXTagorDKYAAAF9MwJzew",
-    "expires_in": 21599,
-    "scope": "account_email profile_nickname",
-    "refresh_token_expires_in": 5183999
- 
+  "access_token": "_8VIS8eQDVTImFIspnOW2n8T7ue2qKlOJcv3TQo9dZwAAAF9PiGfRA",
+  "token_type": "bearer",
+  "refresh_token": "_eR7dCU5CFUylxS65DWE1fbEs9O9tx2K7NvpRwo9dZwAAAF9PiGfQw",
+  "expires_in": 21599,
+  "scope": "talk_message",
+  "refresh_token_expires_in": 5183999
 }
