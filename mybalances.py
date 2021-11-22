@@ -33,7 +33,6 @@ class MybalancesWorker(QThread):
     def close(self):
         self.alive = False
 
-#문제점!! 이더리움으로 계산됨 이걸 내 잔고의 전체 티커 받아오기로 바꿔야함..
 class MybalancesWidget(QWidget):
     def __init__(self, parent=None):  
         super().__init__(parent)
