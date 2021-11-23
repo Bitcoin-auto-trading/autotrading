@@ -7,6 +7,7 @@ from PyQt5.QtCore import Qt, QDateTime
 import time
 import pyupbit
 from PyQt5.QtCore import QThread, pyqtSignal
+from volatility2 import tick
 
 class PriceWorker(QThread):
     dataSent = pyqtSignal(float)
@@ -27,12 +28,12 @@ class PriceWorker(QThread):
         self.alive = False
 
 class ChartWidget(QWidget):
-    def __init__(self, parent=None, ticker="KRW-BTC"):
+    def __init__(self, parent=None, ticker=tick):
         super().__init__(parent)
         uic.loadUi("resource/chart.ui", self)
         self.ticker = ticker
         self.viewLimit = 128
-
+        print(tick)
         self.priceData = QLineSeries()
         self.priceChart = QChart()
         self.priceChart.addSeries(self.priceData)

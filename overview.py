@@ -2,6 +2,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from pyupbit import WebSocketManager
+from volatility2 import tick
 
 class OverViewWorker(QThread):
     # pyqtSignal = 사용자 정의 시그널(웹소켓에서 메인스레드로 데이터를 전송하기 위함)
@@ -29,7 +30,7 @@ class OverViewWorker(QThread):
 
 
 class OverviewWidget(QWidget):
-    def __init__(self, parent=None, ticker="KRW-BTC", ):
+    def __init__(self, parent=None, ticker=tick, ):
         super().__init__(parent)
         uic.loadUi("resource/overview.ui", self)
 

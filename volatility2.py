@@ -1,7 +1,7 @@
 import time
 import pyupbit
 import pyupbit
-
+tick ="KRW-ETH"
 def get_target_price(ticker):
     df = pyupbit.get_ohlcv(ticker)
     yesterday = df.iloc[-2]
@@ -28,3 +28,9 @@ def get_yesterday_ma5(ticker):
     close = df['close']
     ma = close.rolling(5).mean()
     return ma[-2]
+
+def change_ticker(string):
+    global tick
+    tick = "KRW-"+string
+    print(tick)
+    return tick

@@ -5,7 +5,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QTableWidgetItem, QProgressBar
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QPropertyAnimation
-
+from volatility2 import tick
 
 class OrderbookWorker(QThread):
     dataSent = pyqtSignal(dict)
@@ -27,7 +27,7 @@ class OrderbookWorker(QThread):
 
 
 class OrderbookWidget(QWidget):
-    def __init__(self, parent=None, ticker="KRW-BTC"):
+    def __init__(self, parent=None, ticker=tick):
         super().__init__(parent)
         uic.loadUi("resource/orderbook.ui", self)
         self.ticker = ticker
