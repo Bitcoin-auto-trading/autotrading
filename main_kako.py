@@ -9,8 +9,6 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from volatility2 import *
 import requests
 import json
-import os.path
-
 class Kakao:
     def __init__(self):
         with open("kakao_code.json","r") as fp:
@@ -44,7 +42,6 @@ class Kakao:
             })
         }
         requests.post(self.url, headers=self.headers, data=data)
-
 class VolatilityWorker(QThread):
     tradingSent = pyqtSignal(str, str, str)
 
@@ -193,6 +190,8 @@ class VolatilityWorker3(QThread):
         self.alive = False
 
 
+
+
 form_class = uic.loadUiType("resource/main.ui")[0]
 
 class MainWindow(QMainWindow, form_class):
@@ -207,12 +206,19 @@ class MainWindow(QMainWindow, form_class):
 
         self.setWindowTitle("Home Trading System")
 
-        with open("upbit.txt") as f:
+        with open("api.txt") as f:
             lines = f.readlines()
             apikey = lines[0].strip()
             seckey = lines[1].strip()
             self.apiKey.setText(apikey)
             self.secKey.setText(seckey)
+
+    def clickBtn4(self):
+
+        tickerKey = self.tickerKey.text()
+        change_ticker(tickerKey)
+        self.ticker = change_ticker(tickerKey)
+        QMessageBox.information(self, "코인정보", "코인이 {}로 바뀌었습니다.".format(self.ticker))
 
     def clickBtn(self):
         if self.button.text() == "매매시작":
@@ -228,10 +234,15 @@ class MainWindow(QMainWindow, form_class):
                     self.textEdit.append("KEY가 올바르지 않습니다.")
                     return
             QMessageBox.information(self, "매매정보", "자동매매1번입니다.")
+            bot = Kakao()
             self.button.setText("매매중지")
             self.textEdit.append("------ START ------")
             self.textEdit.append("코인 종목 : {}   매매시작 가격 : {}".format(self.ticker,get_target_price(self.ticker)))
             self.textEdit.append("보유 현금 : {} 원".format(self.upbit.get_balance(ticker="KRW")))
+            message = "코인 종목 : {}   매매시작 가격 : {}".format(self.ticker, get_target_price(self.ticker))
+            bot.send_message2me(message)
+            message = "보유 현금 : {} 원".format(self.upbit.get_balance(ticker="KRW"))
+            bot.send_message2me(message)
 
             self.vw = VolatilityWorker(self.ticker, self.upbit)
             self.vw.tradingSent.connect(self.receiveTradingSignal)
@@ -239,6 +250,10 @@ class MainWindow(QMainWindow, form_class):
         else:
             self.vw.close()
             self.textEdit.append("------- END -------")
+            self.button.setText("매매시작")
+            bot = Kakao()
+            message = "매매중지"
+            bot.send_message2me(message)
             self.button.setText("매매시작")
 
     def clickBtn2(self):
@@ -256,11 +271,15 @@ class MainWindow(QMainWindow, form_class):
                     self.textEdit.append("KEY가 올바르지 않습니다.")
                     return
                 QMessageBox.information(self, "매매정보", "자동매매2번입니다.")
+                bot = Kakao()
                 self.button2.setText("매매중지")
                 self.textEdit.append("------ START ------")
                 self.textEdit.append("코인 종목 : {}   매매시작 가격 : {}".format(self.ticker,get_target_price(self.ticker)))
                 self.textEdit.append("보유 현금 : {} 원".format(self.upbit.get_balance(ticker="KRW")))
-
+                message = "코인 종목 : {}   매매시작 가격 : {}".format(self.ticker, get_target_price(self.ticker))
+                bot.send_message2me(message)
+                message = "보유 현금 : {} 원".format(self.upbit.get_balance(ticker="KRW"))
+                bot.send_message2me(message)
                 self.vw = VolatilityWorker2(self.ticker, self.upbit)
                 self.vw.tradingSent.connect(self.receiveTradingSignal)
                 self.vw.start()
@@ -284,11 +303,15 @@ class MainWindow(QMainWindow, form_class):
                     self.textEdit.append("KEY가 올바르지 않습니다.")
                     return
                 QMessageBox.information(self, "매매정보", "자동매매3번입니다.")
+                bot = Kakao()
                 self.button3.setText("매매중지")
                 self.textEdit.append("------ START ------")
                 self.textEdit.append("코인 종목 : {}   매매시작 가격 : {}".format(self.ticker,get_target_price(self.ticker)))
                 self.textEdit.append("보유 현금 : {} 원".format(self.upbit.get_balance(ticker="KRW")))
-
+                message = "코인 종목 : {}   매매시작 가격 : {}".format(self.ticker, get_target_price(self.ticker))
+                bot.send_message2me(message)
+                message = "보유 현금 : {} 원".format(self.upbit.get_balance(ticker="KRW"))
+                bot.send_message2me(message)
                 self.vw = VolatilityWorker3(self.ticker, self.upbit)
                 self.vw.tradingSent.connect(self.receiveTradingSignal)
                 self.vw.start()
@@ -296,13 +319,6 @@ class MainWindow(QMainWindow, form_class):
             self.vw.close()
             self.textEdit.append("------- END -------")
             self.button3.setText("매매시작")
-
-    def clickBtn4(self):
-
-        tickerKey = self.tickerKey.text()
-        change_ticker(tickerKey)
-        self.ticker = change_ticker(tickerKey)
-        QMessageBox.information(self, "코인정보", "코인이 {}로 바뀌었습니다.".format(self.ticker))
 
     def receiveTradingSignal(self, time, type, amount):
         self.textEdit.append(f"[{time}] {type} : {amount}")
@@ -314,26 +330,22 @@ class MainWindow(QMainWindow, form_class):
         self.widget_2.closeEvent(event)
         self.widget_3.closeEvent(event)
     # ------------------------------------------
-
-
-#현재 token 12시간 유효
-#------json 파일 경로 넣어줄 것---------
-file = '~\\Projects\\git\\autotrading\\kakao_code.json'
-
-
+file = 'C:\\Users\\'##파일저장위치 입력
 if __name__ == "__main__":
     if os.path.exists(file):
         print("json exist")
-    else:
+    else :
         url = "https://kauth.kakao.com/oauth/token"
 
         data = {
-            "grant_type": "authorization_code",
-            "client_id": "9fe6eedbb07dcabc2528454a986e5a8e",
-            "redirect_url": "https://localhost:3000",
-            "code": "U_oepoFraPHqVmXNFAiNKRhIU_ko2XAt15j-D_QjF2fd0q_PRcnYPjJh-S1ij1dWscZOOgo9dVsAAAF9TKAHBQ"
+        "grant_type" : "authorization_code",
+        "client_id" : "9fe6eedbb07dcabc2528454a986e5a8e",
+        "redirect_url" : "https://localhost:3000",
+        "code" : "a2gdZ6HKMi3gTtt5NipjupZKpIQFnr_1NHxqcY_puOpfv6_4yTcTcxmVv4Gqixxmhw7XcworDKgAAAF9VSWhTA"
         }
+
         response = requests.post(url, data=data)
+
         tokens = response.json()
 
         with open("kakao_code.json", "w") as fp:
