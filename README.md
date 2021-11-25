@@ -1,6 +1,7 @@
 # 업비트 암호화폐 자동매매
 ### upbit 거래소에서 암호화폐 자동매매 HTS
 
+### python ver 3.9
 
 ### 파일 구성
 - main.py : HTS실행
