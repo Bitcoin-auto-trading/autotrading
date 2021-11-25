@@ -8,42 +8,9 @@ import datetime
 from PyQt5.QtCore import QThread, pyqtSignal
 from volatility2 import *
 import requests
-import json
-import os.path
+##import json
+##import os.path
 
-class Kakao:
-    def __init__(self):
-        with open("kakao_code.json","r") as fp:
-             tokens = json.load(fp)
-
-             auth_url = "https://kauth.kakao.com/oauth/token"
-        data = {
-            "grant_type": "refresh_token",
-            "client_id": "9fe6eedbb07dcabc2528454a986e5a8e",
-            "refresh_token" : tokens["refresh_token"]
-        }
-        response = requests.post(auth_url, data=data)
-        tokens = response.json()
-
-        url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
-
-        headers = {
-            "Authorization": "Bearer " + tokens['access_token']
-        }
-
-        self.url = url
-        self.headers = headers
-    def send_message2me(self, message):
-        data = {
-            "template_object": json.dumps({
-                "object_type": "text",
-                "text": message,
-                "link": {
-                    "web_url": "www.naver.com"
-                }
-            })
-        }
-        requests.post(self.url, headers=self.headers, data=data)
 
 class VolatilityWorker(QThread):
     tradingSent = pyqtSignal(str, str, str)
@@ -316,28 +283,8 @@ class MainWindow(QMainWindow, form_class):
     # ------------------------------------------
 
 
-#현재 token 12시간 유효
-#------json 파일 경로 넣어줄 것---------
-file = '~\\Projects\\git\\autotrading\\kakao_code.json'
-
 
 if __name__ == "__main__":
-    if os.path.exists(file):
-        print("json exist")
-    else:
-        url = "https://kauth.kakao.com/oauth/token"
-
-        data = {
-            "grant_type": "authorization_code",
-            "client_id": "9fe6eedbb07dcabc2528454a986e5a8e",
-            "redirect_url": "https://localhost:3000",
-            "code": "U_oepoFraPHqVmXNFAiNKRhIU_ko2XAt15j-D_QjF2fd0q_PRcnYPjJh-S1ij1dWscZOOgo9dVsAAAF9TKAHBQ"
-        }
-        response = requests.post(url, data=data)
-        tokens = response.json()
-
-        with open("kakao_code.json", "w") as fp:
-            json.dump(tokens, fp)
     app = QApplication(sys.argv)
     mw = MainWindow()
     mw.show()
