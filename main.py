@@ -194,7 +194,7 @@ class MainWindow(QMainWindow, form_class):
                 if self.balance == None:
                     self.textEdit.append("KEY가 올바르지 않습니다.")
                     return
-            QMessageBox.information(self, "매매정보", "자동매매1번입니다.")
+            QMessageBox.information(self, "매매정보", "자동매매1번입니다. 이동평균선 기준 : 5일")
             self.button.setText("매매중지")
             self.textEdit.append("------ START ------")
             self.textEdit.append("코인 종목 : {}   매매시작 가격 : {}".format(self.ticker,get_target_price(self.ticker)))
@@ -222,7 +222,7 @@ class MainWindow(QMainWindow, form_class):
                 if self.balance == None:
                     self.textEdit.append("KEY가 올바르지 않습니다.")
                     return
-                QMessageBox.information(self, "매매정보", "자동매매2번입니다.")
+                QMessageBox.information(self, "매매정보", "자동매매2번입니다. 이동평균선 기준 : 15일")
                 self.button2.setText("매매중지")
                 self.textEdit.append("------ START ------")
                 self.textEdit.append("코인 종목 : {}   매매시작 가격 : {}".format(self.ticker,get_target_price(self.ticker)))
@@ -250,7 +250,7 @@ class MainWindow(QMainWindow, form_class):
                 if self.balance == None:
                     self.textEdit.append("KEY가 올바르지 않습니다.")
                     return
-                QMessageBox.information(self, "매매정보", "자동매매3번입니다.")
+                QMessageBox.information(self, "매매정보", "자동매매3번입니다. 이동평균선 기준 : 30일")
                 self.button3.setText("매매중지")
                 self.textEdit.append("------ START ------")
                 self.textEdit.append("코인 종목 : {}   매매시작 가격 : {}".format(self.ticker,get_target_price(self.ticker)))
